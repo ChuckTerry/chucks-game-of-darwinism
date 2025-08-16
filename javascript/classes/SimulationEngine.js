@@ -308,7 +308,9 @@ export class SimulationEngine {
 
         for (let column = 0; column < grid.rows; column++) {
             for (let row = 0; row < grid.columns; row++) {
-                this.updateCell(row, column, params);
+        for (let row = 0; row < grid.rows; row++) {
+            for (let column = 0; column < grid.columns; column++) {
+                this.updateCell(column, row, params);
             }
         }
 
