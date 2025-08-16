@@ -4,19 +4,19 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <title>Multi-Species Life — Vanilla JS</title>
+        <title>Chuck's Game of Darwinism</title>
         <link type="text/css" rel="stylesheet" href="styles.css" />
     </head>
 
     <body>
         <header>
-            <h1>Multi-Species Life</h1>
+            <h1>Chuck's Game of Darwinism</h1>
             <div class="controls">
                 <div class="group">
-                    <button id="playBtn" class="primary">▶ Play</button>
-                    <button id="stepBtn">Step (N)</button>
-                    <button id="clearBtn">Clear</button>
-                    <button id="randBtn">Randomize (R)</button>
+                    <button type="button" title="[Space]" id="play-button" class="primary">▶ Play</button>
+                    <button type="button" title="[N]" id="step-button">Step</button>
+                    <button type="button" title="[C]" id="clear-button">Clear</button>
+                    <button type="button" title="[R]" id="rand-button">Randomize</button>
                 </div>
                 <div class="group">
                     <label>Speed <input id="speed" type="range" min="1" max="60" value="12" /></label>
@@ -25,10 +25,10 @@
                 </div>
                 <div class="group">
                     <label>Grid</label>
-                    <input id="cols" type="number" min="10" max="512" value="140" title="cols" />
+                    <input id="cols" type="number" min="10" max="1024" value="140" title="cols" />
                     ×
-                    <input id="rows" type="number" min="10" max="512" value="90" title="rows" />
-                    <label>Cell px <input id="cellPx" type="number" min="2" max="20" value="6" /></label>
+                    <input id="rows" type="number" min="10" max="1024" value="90" title="rows" />
+                    <label>Px/Cell <input id="cellPx" type="number" min="1" max="20" value="6" /></label>
                     <button id="resizeBtn">Resize</button>
                 </div>
             </div>
@@ -37,7 +37,20 @@
         <main>
             <aside>
                 <div class="grid-wrap">
-                    <canvas id="cv" width="840" height="540"></canvas>
+                    <div class="canvas-container">
+                        <canvas id="primary-view" width="840" height="540"></canvas>
+                        <canvas id="history-overlay" width="840" height="540" style="display: none;"></canvas>
+                    </div>
+                    <div class="overlay-controls" style="display: none;">
+                        <div class="row">
+                            <label>Overlay Opacity <input id="overlay-opacity" type="range" min="0" max="100" value="50" /></label>
+                            <span id="opacity-value" class="mono">50%</span>
+                            <button type="button" id="clear-history-button">Clear History</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <button type="button" id="toggle-overlay" title="Toggle History Overlay">Show History</button>
+                    </div>
                     <div class="row">
                         <div class="legend">
                             <div><span class="sw empty"></span> Empty (.)</div>
@@ -62,22 +75,21 @@
                         </div>
                     </div>
 
-                    <details open>
+                    <details class="simulation-parameters" open>
                         <summary><strong>Rules & Parameters (live)</strong></summary>
                         <div class="params">
-                            <div class="slider"><label>BIRTH (≥)  <input id="BIRTH" type="range" min="1" max="5" value="3"><span class="mono" id="BIRTHv">3</span></label></div>
-                            <div class="slider"><label>SURVIVE min <input id="Smin" type="range" min="1" max="4" value="2"><span class="mono" id="Sminv">2</span></label></div>
-                            <div class="slider"><label>SURVIVE max <input id="Smax" type="range" min="1" max="5" value="3"><span class="mono" id="Smaxv">3</span></label></div>
-                            <div class="slider"><label>OVER (≥) <input id="OVER" type="range" min="3" max="8" value="4"><span class="mono" id="OVERv">4</span></label></div>
-                            <div class="slider"><label>CONTEST_MIN (≥) <input id="Cmin" type="range" min="1" max="6" value="3"><span class="mono" id="Cminv">3</span></label></div>
-                            <div class="slider"><label>MARGIN (≥) <input id="MARG" type="range" min="0" max="3" value="1"><span class="mono" id="MARGv">1</span></label></div>
-                            <div class="slider"><label>INFECT_STRICT (≥G) <input id="Istrict" type="range" min="1" max="4" value="2"><span class="mono" id="Istrictv">2</span></label></div>
-                            <div class="slider"><label>INFECT_WEAK (≥G if weak) <input id="Iweak" type="range" min="0" max="2" value="1"><span class="mono" id="Iweakv">1</span></label></div>
-                            
-                            <div class="slider"><label>G lifetime TAU <input id="TAU" type="range" min="1" max="6" value="2"><span class="mono" id="TAUv">2</span></label></div>
-                            <div class="slider"><label>Y max age <input id="Ydec" type="range" min="1" max="6" value="2"><span class="mono" id="Ydecv">2</span></label></div>
-                            <div class="slider"><label>Random fill % <input id="dens" type="range" min="0" max="100" value="18"><span class="mono" id="densv">18%</span></label></div>
-                            <div class="slider"><label>G chance in random <input id="gdens" type="range" min="0" max="20" value="2"><span class="mono" id="gdensv">2%</span></label></div>
+                            <div class="slider"><label><input id="BIRTH" type="range" min="1" max="5" value="3"><span class="mono" id="BIRTHv">3</span>BIRTH (≥)</label></div>
+                            <div class="slider"><label><input id="Smin" type="range" min="1" max="4" value="2"><span class="mono" id="Sminv">2</span>SURVIVE min</label></div>
+                            <div class="slider"><label><input id="Smax" type="range" min="1" max="5" value="3"><span class="mono" id="Smaxv">3</span>SURVIVE max</label></div>
+                            <div class="slider"><label><input id="OVER" type="range" min="3" max="8" value="4"><span class="mono" id="OVERv">4</span>OVER (≥)</label></div>
+                            <div class="slider"><label><input id="Cmin" type="range" min="1" max="6" value="3"><span class="mono" id="Cminv">3</span>CONTEST_MIN (≥)</label></div>
+                            <div class="slider"><label><input id="MARG" type="range" min="0" max="3" value="1"><span class="mono" id="MARGv">1</span>MARGIN (≥)</label></div>
+                            <div class="slider"><label><input id="Istrict" type="range" min="1" max="4" value="2"><span class="mono" id="Istrictv">2</span>INFECT_STRICT (≥G)</label></div>
+                            <div class="slider"><label><input id="Iweak" type="range" min="0" max="2" value="1"><span class="mono" id="Iweakv">1</span>INFECT_WEAK (≥G if weak)</label></div>
+                            <div class="slider"><label><input id="TAU" type="range" min="1" max="6" value="2"><span class="mono" id="TAUv">2</span>G lifetime TAU</label></div>
+                            <div class="slider"><label><input id="Ydec" type="range" min="1" max="6" value="2"><span class="mono" id="Ydecv">2</span>Y max age</label></div>
+                            <div class="slider"><label><input id="dens" type="range" min="0" max="100" value="18"><span class="mono" id="densv">18%</span>Random fill %</label></div>
+                            <div class="slider"><label><input id="gdens" type="range" min="0" max="20" value="2"><span class="mono" id="gdensv">2%</span>G chance in random</label></div>
                         </div>
                     </details>
 
@@ -89,7 +101,7 @@
             </aside>
         </main>
 
-        <script src="script.js"></script>
+        <script src="javascript/script.js" type="module"></script>
     </body>
 
 </html>
