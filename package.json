@@ -1,0 +1,29 @@
+{
+  "name": "chucks-game-of-darwinism",
+  "version": "1.0.0",
+  "description": "A new spin on Conway's Game of Life",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChuckTerry/chucks-game-of-darwinism.git"
+  },
+  "author": "Chuck Terry",
+  "license": "MIT",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/ChuckTerry/chucks-game-of-darwinism/issues"
+  },
+  "homepage": "https://github.com/ChuckTerry/chucks-game-of-darwinism#readme",
+  "devDependencies": {
+    "@eslint/css": "^0.10.0",
+    "@eslint/js": "^9.33.0",
+    "@eslint/json": "^0.13.1",
+    "@eslint/markdown": "^7.1.0",
+    "@stylistic/eslint-plugin": "^5.2.3",
+    "eslint": "^9.33.0",
+    "globals": "^16.3.0"
+  }
+}
