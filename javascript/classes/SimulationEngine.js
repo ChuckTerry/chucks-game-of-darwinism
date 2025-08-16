@@ -306,8 +306,6 @@ export class SimulationEngine {
         const params = this.ruleParams.getValues();
         const grid = this.gridModel;
 
-        for (let column = 0; column < grid.rows; column++) {
-            for (let row = 0; row < grid.columns; row++) {
         for (let row = 0; row < grid.rows; row++) {
             for (let column = 0; column < grid.columns; column++) {
                 this.updateCell(column, row, params);
