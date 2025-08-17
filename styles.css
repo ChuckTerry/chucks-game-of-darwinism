@@ -86,7 +86,6 @@ label {
     align-items: center;
 }
 
-
 input[type="number"],
 input[type="range"],
 select {
@@ -137,7 +136,6 @@ button.primary {
     left: -38px;
     color: #8da6e0;
 }
-
 #history-overlay {
     position: absolute;
     top: 0;
@@ -150,13 +148,12 @@ button.primary {
     width: 70px;
 }
 
-    .overlay-controls {
+.overlay-controls {
     background: var(--panel);
     border: var(--separator);
     border-radius: 8px;
     padding: 8px;
     margin-top: 8px;
-    
 }
 
 .legend {
@@ -164,7 +161,7 @@ button.primary {
     grid-template-columns: 1fr 1fr;
     gap: 6px 12px;
     font-size: 13px;
-    
+
     input[type="color"] {
         width: 35px;
         height: 25px;
@@ -225,6 +222,22 @@ details.simulation-parameters {
             margin-right: 4px;
         }
     }
+}
+
+details.simulation-parameters {
+
+    label {
+
+        span {
+            padding-right: 18px;
+        }
+
+        input {
+            vertical-align: middle;
+            margin-right: 4px;
+        }
+    }
+
 }
 
 @media (max-width: 900px) {

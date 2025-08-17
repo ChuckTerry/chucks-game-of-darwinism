@@ -118,5 +118,6 @@ export class HistoryRenderer {
         // Update canvas size and clear history
         this.updateCanvasSize();
         this.clearHistory();
+
     }
 }

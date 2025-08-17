@@ -107,6 +107,8 @@ export default [
           'exceptions': {}
         }
       ],
+      '@stylistic/block-spacing': ['error', 'always'],
+      '@stylistic/comma-dangle': ['error', 'never'],
       '@stylistic/quotes': [
         'error',
         'single'
