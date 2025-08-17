@@ -130,12 +130,12 @@ button.primary {
 }
 
 .input-units {
-    position: absolute;
     display: inline-block;
     position: relative;
     left: -38px;
     color: #8da6e0;
 }
+
 #history-overlay {
     position: absolute;
     top: 0;
