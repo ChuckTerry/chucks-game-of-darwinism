@@ -31,7 +31,7 @@ export class InteractionHandler {
         this.renderer = renderer;
         this.historyRenderer = historyRenderer;
         this.painting = false;
-        this.brush = STATE.SPECIES_A;
+        this.brush = brushSelect.value;
 
         this.setupEventListeners();
     }
