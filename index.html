@@ -14,22 +14,21 @@
             <div class="controls">
                 <div class="group">
                     <button type="button" title="[Space]" id="play-button" class="primary">▶ Play</button>
-                    <button type="button" title="[N]" id="step-button">Step</button>
-                    <button type="button" title="[C]" id="clear-button">Clear</button>
-                    <button type="button" title="[R]" id="rand-button">Randomize</button>
+                    <button type="button" title="[N]" id="step-button">🡒• Step</button>
+                    <button type="button" title="[C]" id="clear-button">⎚ Clear</button>
+                    <button type="button" title="[R]" id="rand-button">🔀 Randomize</button>
                 </div>
                 <div class="group">
-                    <label>Speed <input id="speed" type="range" min="1" max="60" value="12" /></label>
-
-                    <span id="fps" class="mono">12 fps</span>
+                    <label>Speed <input id="speed" type="range" min="1" max="60" value="30" /></label>
+                    <span id="fps" class="mono">30 fps</span>
                 </div>
                 <div class="group">
                     <label>Grid</label>
-                    <input id="cols" type="number" min="10" max="1024" value="140" title="cols" />
+                    <input id="cols" type="number" min="10" max="1024" value="400" title="cols" />w&nbsp;&nbsp;
                     ×
-                    <input id="rows" type="number" min="10" max="1024" value="90" title="rows" />
-                    <label>Px/Cell <input id="cellPx" type="number" min="1" max="20" value="6" /></label>
-                    <button id="resizeBtn">Resize</button>
+                    <input id="rows" type="number" min="10" max="1024" value="180" title="rows" />h
+                    <label><input id="cellPx" type="number" min="1" max="20" value="3" /> Px/Cell</label>
+                    <button id="resizeBtn">⤢ Resize</button>
                 </div>
             </div>
         </header>
@@ -39,42 +38,34 @@
                 <div class="grid-wrap">
                     <div class="canvas-container">
                         <canvas id="primary-view" width="840" height="540"></canvas>
-                        <canvas id="history-overlay" width="840" height="540" style="display: none;"></canvas>
+                        <canvas id="history-overlay" width="840" height="540"></canvas>
                     </div>
-                    <div class="overlay-controls" style="display: none;">
-                        <div class="row">
-                            <label>Overlay Opacity <input id="overlay-opacity" type="range" min="0" max="100" value="50" /></label>
-                            <span id="opacity-value" class="mono">50%</span>
+                    <div class="row">
+                        <div class="group">
+                            <label>History Opacity<div><input id="overlay-opacity" type="number" min="0" max="100" value="0" title="Overlay Opacity" /><span class="input-units">%</span></div>
+                            </label>
                             <button type="button" id="clear-history-button">Clear History</button>
                         </div>
-                    </div>
-                    <div class="row">
-                        <button type="button" id="toggle-overlay" title="Toggle History Overlay">Show History</button>
-                    </div>
-                    <div class="row">
-                        <div class="legend">
-                            <div><span class="sw empty"></span> Empty (.)</div>
-                            <div><span class="sw species-a"></span> Species A</div>
-                            <div><span class="sw species-b"></span> Species B</div>
-                            <div><span class="sw diseased"></span> Diseased</div>
-                            <div><span class="sw contested"></span> Contested</div>
-                            <div><span class="sw brush-ab"></span> Brush: A/B</div>
-                        </div>
-                        <div class="row">
-                            <div>
-                                <label>Brush</label>
-                                <select id="brush" title="Brush">
-                                    <option value="1">A (red)</option>
-                                    <option value="2">B (blue)</option>
-                                    <option value="4">Contested (yellow)</option>
-                                    <option value="3">Disease (green)</option>
-                                    <option value="0">Empty (erase)</option>
-                                </select>
+                        <div class="group">
+                            <div class="legend">
+                                <div><input type="color" id="color-empty" value="#000000" title="Change Empty color"> Empty </div>
+                                <div><input type="color" id="color-species-a" value="#e74c3c" title="Change Species A color"> Species A </div>
+                                <div><input type="color" id="color-species-b" value="#3498db" title="Change Species B color"> Species B </div>
+                                <div><input type="color" id="color-diseased" value="#2ecc71" title="Change Diseased color"> Diseased </div>
+                                <div><input type="color" id="color-contested" value="#f1c40f" title="Change Contested color"> Contested </div>
                             </div>
-                            <div class="hint">Click=paint · Shift-click=erase · Right-click=cycle</div>
                         </div>
+                        <div class="group">
+                            <label>Brush</label>
+                            <select id="brush" title="Brush">
+                                <option value="0">Empty</option>
+                                <option value="1">Species A</option>
+                                <option value="2">Species B</option>
+                                <option value="3">Disease</option>
+                                <option value="4">Contested</option>
+                            </select>
+                        <div class="hint">Click: Paint<br />Shift-click: Erase<br />Right-click: Cycle</div></div>
                     </div>
-
                     <details class="simulation-parameters" open>
                         <summary><strong>Rules & Parameters (live)</strong></summary>
                         <div class="params">
