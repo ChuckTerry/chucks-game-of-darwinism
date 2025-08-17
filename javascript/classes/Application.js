@@ -13,6 +13,7 @@ import { SimulationEngine } from './SimulationEngine.js';
 import { InteractionHandler } from './InteractionHandler.js';
 import { AnimationController } from './AnimationController.js';
 import { STATE } from '../constants/state.js';
+import { COLORS, updateColor, loadColors } from '../constants/colors.js';
 
 const canvas = document.getElementById('primary-view');
 const historyCanvas = document.getElementById('history-overlay');
@@ -23,10 +24,12 @@ const colsInput = document.getElementById('cols');
 const rowsInput = document.getElementById('rows');
 const cellPxInput = document.getElementById('cellPx');
 const resizeBtn = document.getElementById('resizeBtn');
-const toggleOverlayBtn = document.getElementById('toggle-overlay');
-const overlayControls = document.querySelector('.overlay-controls');
 const overlayOpacitySlider = document.getElementById('overlay-opacity');
-const opacityValue = document.getElementById('opacity-value');
+const colorEmpty = document.getElementById('color-empty');
+const colorSpeciesA = document.getElementById('color-species-a');
+const colorSpeciesB = document.getElementById('color-species-b');
+const colorDiseased = document.getElementById('color-diseased');
+const colorContested = document.getElementById('color-contested');
 
 
 export class Application {
@@ -43,8 +46,10 @@ export class Application {
      * @property {AnimationController} animation - Controls animation playback and frame timing
      */
     constructor() {
+        this.loadSavedColors();
         this.initializeComponents();
         this.setupEventListeners();
+        this.historyRenderer.setOpacity(overlayOpacitySlider.value / 100);
         this.seedInitialPattern();
     }
 
@@ -77,6 +82,20 @@ export class Application {
     }
 
     /**
+     * Loads saved colors from localStorage and updates color pickers
+     */
+    loadSavedColors() {
+        loadColors();
+        
+        // Update color picker values to match loaded colors
+        colorEmpty.value = COLORS[STATE.EMPTY];
+        colorSpeciesA.value = COLORS[STATE.SPECIES_A];
+        colorSpeciesB.value = COLORS[STATE.SPECIES_B];
+        colorDiseased.value = COLORS[STATE.DISEASED];
+        colorContested.value = COLORS[STATE.CONTESTED];
+    }
+
+    /**
      * Sets up all event listeners for UI controls and keyboard shortcuts.
      * Binds button clicks and keyboard events to their corresponding actions.
      * 
@@ -101,11 +120,36 @@ export class Application {
         resizeBtn.addEventListener('click', () => this.resize());
         
         // Overlay controls
-        toggleOverlayBtn.addEventListener('click', () => this.toggleOverlay());
-        overlayOpacitySlider.addEventListener('input', (e) => {
-            const opacity = e.target.value / 100;
+        overlayOpacitySlider.addEventListener('input', (event) => {
+            const opacity = event.target.value / 100;
             this.historyRenderer.setOpacity(opacity);
-            opacityValue.textContent = `${e.target.value}%`;
+        });
+
+        // Color picker controls
+        colorEmpty.addEventListener('change', (event) => {
+            updateColor(STATE.EMPTY, event.target.value);
+            this.historyRenderer.updateColors();
+            this.renderer.draw();
+        });
+        colorSpeciesA.addEventListener('change', (event) => {
+            updateColor(STATE.SPECIES_A, event.target.value);
+            this.historyRenderer.updateColors();
+            this.renderer.draw();
+        });
+        colorSpeciesB.addEventListener('change', (event) => {
+            updateColor(STATE.SPECIES_B, event.target.value);
+            this.historyRenderer.updateColors();
+            this.renderer.draw();
+        });
+        colorDiseased.addEventListener('change', (event) => {
+            updateColor(STATE.DISEASED, event.target.value);
+            this.historyRenderer.updateColors();
+            this.renderer.draw();
+        });
+        colorContested.addEventListener('change', (event) => {
+            updateColor(STATE.CONTESTED, event.target.value);
+            this.historyRenderer.updateColors();
+            this.renderer.draw();
         });
 
         // Keyboard shortcuts
@@ -255,17 +299,6 @@ export class Application {
         }
 
         this.renderer.draw();
-    }
-
-    /**
-     * Toggles the visibility of the history overlay canvas.
-     * Also toggles the visibility of overlay-specific controls.
-     */
-    toggleOverlay() {
-        const isVisible = !this.historyRenderer.isVisible;
-        this.historyRenderer.setVisible(isVisible);
-        overlayControls.style.display = isVisible ? 'block' : 'none';
-        toggleOverlayBtn.textContent = isVisible ? 'Hide History' : 'Show History';
     }
 
     /**
