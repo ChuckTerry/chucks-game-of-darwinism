@@ -1,7 +1,7 @@
 :root {
     --bg: #0e0f12;
     --fg: #e8e8ef;
-    --muted: #a4a7b3;
+    --muted: #b0b3bf;
     --panel: #151822;
     --accent: #7aa2ff;
     --line: #262a36;
@@ -10,6 +10,15 @@
     --green: #2ecc71;
     --yellow: #f1c40f;
     --black: #000000;
+    
+    /* Cell colors (can be dynamically updated) */
+    --color-species-a: #e74c3c;
+    --color-species-b: #3498db;
+    --color-diseased: #2ecc71;
+    --color-contested: #f1c40f;
+
+    /* Simple Border/Line */
+    --separator: 1px solid var(--line);
 }
 
 * {
@@ -29,7 +38,7 @@ body {
 header {
     padding: 10px 16px;
     background: #0a0c10;
-    border-bottom: 1px solid var(--line);
+    border-bottom: var(--separator);
     display: flex;
     gap: 12px;
     align-items: center;
@@ -42,6 +51,24 @@ header {
     }
 }
 
+main {
+    padding: 12px;
+}
+
+aside {
+    background: var(--panel);
+    border: var(--separator);
+    border-radius: 16px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+label {
+    color: var(--muted);
+}
+
 .controls {
     display: flex;
     gap: 10px;
@@ -51,7 +78,7 @@ header {
 
 .group {
     background: var(--panel);
-    border: 1px solid var(--line);
+    border: var(--separator);
     padding: 8px;
     border-radius: 12px;
     display: flex;
@@ -59,30 +86,28 @@ header {
     align-items: center;
 }
 
-label {
-    color: var(--muted);
-}
 
 input[type="number"],
 input[type="range"],
 select {
     background: #0e121b;
     color: var(--fg);
-    border: 1px solid var(--line);
+    border: var(--separator);
     border-radius: 8px;
     padding: 4px 6px;
 }
 
 button {
-    background: #111522;
+    background: #1e2335;
     color: var(--fg);
-    border: 1px solid var(--line);
+    border: var(--separator);
     border-radius: 10px;
     padding: 8px 10px;
     cursor: pointer;
 }
 
 button:hover {
+    background: #252b40;
     border-color: #3a4054;
 }
 
@@ -92,34 +117,25 @@ button.primary {
     border-color: #4b72ff;
 }
 
-main {
-    display: grid;
-    grid-template-columns: minmax(260px, 360px) 1fr;
-    gap: 12px;
-    padding: 12px;
-}
-
-aside {
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
 .canvas-container {
     position: relative;
     display: inline-block;
+
+    canvas {
+        background: #000;
+        border: var(--separator);
+        border-radius: 12px;
+        image-rendering: pixelated;
+        background-image: linear-gradient(transparent, transparent);
+    }
 }
 
-canvas {
-    background: #000;
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    image-rendering: pixelated;
-    background-image: linear-gradient(transparent, transparent);
+.input-units {
+    position: absolute;
+    display: inline-block;
+    position: relative;
+    left: -38px;
+    color: #8da6e0;
 }
 
 #history-overlay {
@@ -130,19 +146,17 @@ canvas {
     pointer-events: none;
 }
 
-.overlay-controls {
+#overlay-opacity {
+    width: 70px;
+}
+
+    .overlay-controls {
     background: var(--panel);
-    border: 1px solid var(--line);
+    border: var(--separator);
     border-radius: 8px;
     padding: 8px;
     margin-top: 8px;
     
-    .row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        justify-content: space-between;
-    }
 }
 
 .legend {
@@ -150,21 +164,21 @@ canvas {
     grid-template-columns: 1fr 1fr;
     gap: 6px 12px;
     font-size: 13px;
-}
-
-.sw {
-    width: 14px;
-    height: 14px;
-    border-radius: 3px;
-    display: inline-block;
-    margin-right: 6px;
-    border: 1px solid #0006;
+    
+    input[type="color"] {
+        width: 35px;
+        height: 25px;
+        background-color: attr(value);
+        cursor: pointer;
+        vertical-align: middle;
+        margin-left: 6px;
+    }
 }
 
 .row {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    align-items: flex-start;
+    justify-content: flex-start;
     gap: 10px;
 
     > div {
@@ -200,31 +214,8 @@ canvas {
     font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace
 }
 
-div.legend {
-    .empty {
-        background: #000
-    }
-    .species-a {
-        background: #e74c3c
-    }
-    .species-b {
-        background: #3498db
-    }
-    .diseased {
-        background: #2ecc71
-    }
-    .contested {
-        background: #f1c40f
-    }
-    .brush-ab {
-        background: linear-gradient(135deg,#e74c3c 50%,#3498db 50%)
-    }
-}
-
 details.simulation-parameters {
-
     label {
-
         span {
             padding-right: 18px;
         }
@@ -234,7 +225,6 @@ details.simulation-parameters {
             margin-right: 4px;
         }
     }
-
 }
 
 @media (max-width: 900px) {
