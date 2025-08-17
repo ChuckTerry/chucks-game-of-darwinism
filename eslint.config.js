@@ -98,8 +98,15 @@ export default [
           'after': true
         }
       ],
-      '@stylistic/block-spacing': ['error', 'always'],
       '@stylistic/comma-dangle': ['error', 'never'],
+      '@stylistic/block-spacing': ['error', 'always'],
+      '@stylistic/comma-style': [
+        'error',
+        'last',
+        {
+          'exceptions': {}
+        }
+      ],
       '@stylistic/quotes': [
         'error',
         'single'
